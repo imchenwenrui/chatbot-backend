@@ -9,3 +9,42 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  # ======================
+  #  数据源配置(请按需修改为真实环境)
+  # ======================
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:chatbot}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER:chatbot}
+    password: ${MYSQL_PASSWORD:please_change_me}
+
+# ======================
+#  MyBatis-Plus 配置
+# ======================
+mybatis-plus:
+  # 扫描 mapper 接口
+  mapper-locations: classpath*:/mapper/**/*.xml
+  # entity 扫描(多模块以 ; 分隔)
+  type-aliases-package: com.very.chatbot.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    cache-enabled: false
+  global-config:
+    banner: false
+    db-config:
+      # 全局主键策略,与 CLAUDE.md 的 IdType.ASSIGN_ID 对齐
+      id-type: ASSIGN_ID
+      # 逻辑删除字段名,与 CLAUDE.md 的 deleted 一致
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# ======================
+#  日志
+# ======================
+logging:
+  level:
+    root: INFO
+    com.very.chatbot: DEBUG
+    com.baomidou.mybatisplus: WARN
