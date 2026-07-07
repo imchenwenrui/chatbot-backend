@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 会话列表查询条件 DTO(GET /api/conversations)。
+ * 会话列表查询条件 DTO 对应接口 POST /api/conversations/list。
  *
  * @author chatbot
  */

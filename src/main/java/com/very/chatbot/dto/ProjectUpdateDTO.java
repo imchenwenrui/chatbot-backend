@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
- * 修改项目请求 DTO(PATCH /api/projects/{id})。
+ * 修改项目请求 DTO 对应接口 POST /api/projects/{projectId}/update。
  * name / description 至少传一个。
  *
  * @author chatbot

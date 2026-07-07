@@ -7,7 +7,7 @@ import com.very.chatbot.vo.MessagePageVO;
 /**
  * 消息 Service。
  *
- * 对应 docs/API文档.md 3.7 历史消息 / 3.9 反馈。
+ * 对应 API 文档第 3.7 节历史消息与第 3.9 节反馈。
  *
  * @author chatbot
  */

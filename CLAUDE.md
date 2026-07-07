@@ -8,7 +8,7 @@
 - 禁止使用字段注入 @Autowired
 - ORM 使用 Mybatis-Plus
 - 类都要在顶部import进来，不要直接用全限定名，除非有重名类，否则禁止直接这样使用，例：com.very.chatbot.entity.ConversationEntity
-
+- 接口全部使用 POST 请求，不要使用除此之外的其他请求方式
 ---
 
 # 包结构

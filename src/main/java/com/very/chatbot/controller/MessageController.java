@@ -2,23 +2,24 @@ package com.very.chatbot.controller;
 
 import com.very.chatbot.common.ApiResponse;
 import com.very.chatbot.dto.MessageFeedbackDTO;
+import com.very.chatbot.dto.MessageListQueryDTO;
 import com.very.chatbot.service.MessageService;
 import com.very.chatbot.vo.MessagePageVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
 /**
- * 消息接口(对应 docs/API文档.md 中 3.7 历史消息 / 3.9 反馈)。
+ * 消息接口,对应 API 文档第 3.7 节历史消息与第 3.9 节反馈。
+ *
+ * 全部接口强制走 POST。
  *
  * @author chatbot
  */
@@ -32,26 +33,27 @@ public class MessageController {
     private final MessageService messageService;
 
     /**
-     * 历史消息(对应 3.7),按创建时间正序返回某会话下的消息列表。
+     * 历史消息,对应接口第 3.7 节。按创建时间正序返回某会话下的消息列表。
      *
-     * @param conversationId 会话 id(路径参数)
-     * @param limit          单页大小,默认 50
-     * @return 消息分页 VO(无 nextCursor,简化为单页)
+     * @param conversationId 会话 id 路径参数
+     * @param query          查询条件 仅包含 limit 字段,可空
+     * @return 消息分页 VO 简化为单页 不暴露 nextCursor
      */
-    @GetMapping
+    @PostMapping("/list")
     public ApiResponse<MessagePageVO> list(@PathVariable Long conversationId,
-                                           @RequestParam(required = false) Integer limit) {
+                                           @Valid @RequestBody(required = false) MessageListQueryDTO query) {
+        Integer limit = query == null ? null : query.getLimit();
         return ApiResponse.ok(messageService.pageMessagesByConversation(conversationId, limit));
     }
 
     /**
-     * 消息反馈(对应 3.9)。
+     * 消息反馈,对应接口第 3.9 节。
      *
-     * {@code feedback = null} 表示清除反馈。
+     * feedback = null 表示清除反馈。
      *
-     * @param conversationId 会话 id(路径参数)
-     * @param messageId      消息 id(路径参数)
-     * @param dto            反馈请求体,feedback 可为 null
+     * @param conversationId 会话 id 路径参数
+     * @param messageId      消息 id 路径参数
+     * @param dto            反馈请求体 feedback 可为 null
      * @return 空响应
      */
     @PostMapping("/{messageId}/feedback")

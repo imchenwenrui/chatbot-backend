@@ -8,11 +8,10 @@ import java.io.Serializable;
 /**
  * 统一响应包装。
  *
- * 与 docs/API文档.md 第 1.4 节「通用响应结构」一致,JSON 形如:
- *
- *   "code": 0
- *   "message": "ok"
- *   "data": ...
+ * 与 API 文档第 1.4 节通用响应结构一致,JSON 形如:
+ *   code 为 0
+ *   message 为 ok
+ *   data 为业务数据
  *
  * @param <T> 业务数据类型
  * @author chatbot

@@ -6,7 +6,7 @@ import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
- * 消息反馈 DTO(POST /api/conversations/{id}/messages/{messageId}/feedback)。
+ * 消息反馈 DTO 对应接口 POST /api/conversations/{conversationId}/messages/{messageId}/feedback。
  * 传 null 表示清除反馈。
  *
  * @author chatbot

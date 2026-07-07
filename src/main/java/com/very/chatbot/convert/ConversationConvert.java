@@ -28,6 +28,10 @@ public class ConversationConvert {
         vo.setCreatedAt(entity.getCreateTime());
         vo.setUpdatedAt(entity.getUpdateTime());
         vo.setArchived(entity.getArchived() != null && entity.getArchived() == 1);
+        // DB 用 0 表示「无项目」,API 文档第 2 章要求 null,统一在 VO 层映射
+        if (vo.getProjectId() != null && vo.getProjectId() == 0L) {
+            vo.setProjectId(null);
+        }
         return vo;
     }
 }

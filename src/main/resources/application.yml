@@ -2,6 +2,13 @@ server:
   port: 8080
   servlet:
     context-path: /
+    encoding:
+      charset: UTF-8
+      force: true
+  # SSE 长连接:不设异步超时,避免流被服务端断开
+  tomcat:
+    threads:
+      max: 200
 
 spring:
   application:
@@ -9,14 +16,38 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+    # 雪 Long(19 位) 超过 JS Number.MAX_SAFE_INTEGER(2^53-1=9007199254740992),
+    # 若不处理 JS Number 会丢失精度(末位被舍入)。
+    # 把所有 Long 在 JSON 中序列化为字符串,前端按字符串处理 id 即可无损。
+    # 文档: docs/API文档.md §2 数据结构约定。
+    generator:
+      write-numbers-as-strings: true
+    # WRITE_BIGDECIMAL_AS_PLAIN 是双保险:BigDecimal 也按字符串
+    serialization:
+      write-bigdecimal-as-plain: true
+  # 异步请求超时(0=不过期),SSE 依赖此配置
+  mvc:
+    async:
+      request-timeout: 0
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   # ======================
   #  数据源配置(请按需修改为真实环境)
   # ======================
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:chatbot}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
-    username: ${MYSQL_USER:chatbot}
-    password: ${MYSQL_PASSWORD:please_change_me}
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:aptx4869}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 10000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: ChatbotHikariCP
 
 # ======================
 #  MyBatis-Plus 配置
@@ -39,6 +70,31 @@ mybatis-plus:
       logic-delete-field: deleted
       logic-delete-value: 1
       logic-not-delete-value: 0
+
+# ======================
+#  Dify 集成配置
+# ======================
+#  mock=true 时不调真 Dify,本地按时间间隔推假 delta/done 帧
+#  接入真 Dify 时:mock=false + 配 base-url/api-key/chatflow-id
+dify:
+  mock: ${DIFY_MOCK:true}
+  base-url: ${DIFY_BASE_URL:https://api.dify.ai/v1}
+  api-key: ${DIFY_API_KEY:}
+  chatflow-id: ${DIFY_CHATFLOW_ID:}
+  timeout-ms: ${DIFY_TIMEOUT_MS:60000}
+  # mock 模式下推流速度(每段间隔毫秒)
+  mock-interval-ms: 80
+
+# ======================
+#  业务配置
+# ======================
+chatbot:
+  # 单用户每分钟最大请求数(超出后返回 1004)
+  rate-limit-per-minute: 30
+  # 会话标题截取长度(首条 user 消息)
+  title-length: 20
+  # SSE 消息 content 最大长度
+  max-content-length: 4000
 
 # ======================
 #  日志

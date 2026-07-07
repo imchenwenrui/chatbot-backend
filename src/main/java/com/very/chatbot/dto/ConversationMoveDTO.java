@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 移动会话到指定项目请求 DTO(PATCH /api/conversations/{id}/project)。
+ * 移动会话到指定项目请求 DTO 对应接口 POST /api/conversations/{conversationId}/project。
  * projectId 为 null 表示移到「无项目」分组。
  *
  * @author chatbot

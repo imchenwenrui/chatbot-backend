@@ -10,7 +10,7 @@ import com.very.chatbot.vo.ProjectVO;
 /**
  * 项目 Service。
  *
- * 对应 docs/API文档.md 第 4 章。
+ * 对应 API 文档第 4 章。
  *
  * @author chatbot
  */

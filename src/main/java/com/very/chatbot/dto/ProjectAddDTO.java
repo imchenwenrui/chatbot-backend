@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
- * 新建项目请求 DTO(POST /api/projects)。
+ * 新建项目请求 DTO 对应接口 POST /api/projects。
  *
  * @author chatbot
  */

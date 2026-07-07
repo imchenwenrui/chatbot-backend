@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * 业务码枚举。
  *
- * 与 docs/API文档.md v0.2 中第 1.5 节「通用错误码」一一对应。
+ * 与 API 文档第 1.5 节通用错误码一一对应。
  *
  * @author chatbot
  */
@@ -52,7 +52,7 @@ public enum ApiCode {
     INTERNAL_ERROR(9999, 500, "服务内部异常");
 
     /**
-     * 业务码(与 docs/API文档.md 一致)
+     * 业务码,与 API 文档一致
      */
     private final int code;
 

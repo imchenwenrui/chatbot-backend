@@ -4,15 +4,17 @@ import com.very.chatbot.dto.ConversationAddDTO;
 import com.very.chatbot.dto.ConversationMoveDTO;
 import com.very.chatbot.dto.ConversationQueryDTO;
 import com.very.chatbot.dto.ConversationRenameDTO;
+import com.very.chatbot.dto.MessageSendDTO;
 import com.very.chatbot.entity.ConversationEntity;
 import com.very.chatbot.exception.BusinessException;
 import com.very.chatbot.vo.ConversationPageVO;
 import com.very.chatbot.vo.ConversationVO;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
  * 会话 Service。
  *
- * 对应 docs/API文档.md 第 3 章(不含流式发送消息与反馈)。
+ * 对应 API 文档第 3 章,不含流式发送消息与反馈。
  *
  * @author chatbot
  */
@@ -97,4 +99,18 @@ public interface ConversationService {
      * @throws BusinessException 找不到时抛 1002
      */
     ConversationEntity requireExists(Long conversationId);
+
+    /**
+     * 发送消息,流式 SSE。对应 API 文档第 5.1 节。
+     *
+     * 实现要点:校验会话存在与未归档;先写 user 消息;创建 assistant 占位消息并记下 messageId;
+     * 调 Dify 或 Mock 拉流,逐 chunk 通过 emitter 推;message_end 时落库最终内容并推 done 帧;
+     * 首轮拿到 difyConversationId 时回写 t_conversation.dify_conv_id;
+     * 首条 user 消息后异步改 title,前 20 字。
+     *
+     * @param conversationId 会话 id
+     * @param dto            消息内容
+     * @return SseEmitter 由 controller 返回
+     */
+    SseEmitter sendMessageStream(Long conversationId, MessageSendDTO dto);
 }

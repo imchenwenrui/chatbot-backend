@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 新建会话请求 DTO(POST /api/conversations)。
+ * 新建会话请求 DTO 对应接口 POST /api/conversations。
  * projectId 可空,空表示「无项目」分组。
  *
  * @author chatbot

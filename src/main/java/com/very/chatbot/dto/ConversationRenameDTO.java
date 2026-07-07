@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
- * 重命名会话请求 DTO(PATCH /api/conversations/{id})。
+ * 重命名会话请求 DTO 对应接口 POST /api/conversations/{conversationId}/rename。
  *
  * @author chatbot
  */
